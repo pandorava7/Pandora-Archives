@@ -116,10 +116,10 @@ const BlogPage: React.FC = () => {
                             />
                         </defs>
                         <g className={waveStyles.parallax}>
-                            <use xlinkHref="#gentle-wave" x="48" y="0" fill="rgba(165 199 255 / 0.7)" />
-                            <use xlinkHref="#gentle-wave" x="48" y="3" fill="rgba(165 199 255 / 0.5)" />
-                            <use xlinkHref="#gentle-wave" x="48" y="5" fill="rgba(165 199 255 / 0.3)" />
-                            <use xlinkHref="#gentle-wave" x="48" y="7" fill="rgba(165 199 255)" />
+                            <use xlinkHref="#gentle-wave" x="48" y="0" className={waveStyles.wave1} />
+                            <use xlinkHref="#gentle-wave" x="48" y="3" className={waveStyles.wave2} />
+                            <use xlinkHref="#gentle-wave" x="48" y="5" className={waveStyles.wave3} />
+                            <use xlinkHref="#gentle-wave" x="48" y="7" className={waveStyles.wave4} />
                         </g>
                     </svg>
                 </div>
