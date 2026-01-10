@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f7faff;
+  --fg: #1a1a1a;
+}
+
+:root.dark {
+  --bg: #121212;
+  --fg: #f5f5f5;
 }
 
 @theme inline {
@@ -14,13 +19,52 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #0a0a0a;
+    --background: #ededed;
   }
+}
+
+@font-face {
+  font-family: "MyFont";
+  src: url("@/assets/fonts/genshin_impact.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  
+  font-family: "MyFont";
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* globals.css */
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.brand-gradient-text {
+  color: #6a8aff;
+  background-image: linear-gradient(45deg, #6a8aff, #b2fbff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-shadow {
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
 }

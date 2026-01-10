@@ -1,0 +1,52 @@
+.container {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 32px;
+  font-family: sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.desc {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background: darkgray;
+}
+
+.cardHeader {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.cardBody {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 16px;
+}
+
+.button {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #0070f3;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+
+.button:hover {
+  background: #005ac1;
+}

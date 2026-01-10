@@ -1,0 +1,67 @@
+{
+    "site": {
+        "title": "个人档案馆",
+        "description": "记录、收藏与记忆"
+    },
+    "common": {
+        "enter": "进入",
+        "welcome": "欢迎访问我的新网站！",
+        "description": "我刚刚买了这个域名，随便看看吧",
+        "loading": [
+            "泡一杯咖啡…",
+            "整理桌面…",
+            "小憩片刻…",
+            "翻看笔记…",
+            "望向窗外…"
+        ],
+        "username" : "用户名",
+
+        "write_article_button": "博客",
+        "search_placeholder": "搜索内容...",
+        "general": "常规",
+        "my_archive": "我的收藏",
+        "my_project": "我的项目",
+        "about_website": "关于网站",
+        "my_drive": "网盘",
+        "tool_box":"工具箱",
+        "profession": "职业"
+    },
+
+
+    "brand":{
+        "title1": "潘多拉",
+        "title2": "的",
+        "title3": "档案馆"
+    },
+    "introduce": "一名热爱创作的开发者",
+    "highlight":{
+        "title1":"精彩瞬间",
+        "title2":"值得纪念的一瞬间",
+        "desc1":"用简短的笔墨",
+        "desc2":"记录下这段人生旅程中的点点滴滴",
+        "desc3":"那是曾经的自己，留待未来想念",
+        "unlock_button":"解锁",
+        "item1_desc":"这是第一个介绍文字",
+        "item2_desc":"这是第二个介绍文字",
+        "item3_desc":"这是第三个介绍文字"
+    },
+    "minecraft":{
+        "title":"Minecraft 服务器永久开放",
+        "desc1":"自由建造",
+        "desc2":"休闲养老",
+        "desc3":"朋友服"
+    },
+    "world":{
+        "button":{
+            "menu":"回到主页"
+        },
+        "info":"素材来源于Arcaea游戏中的故事模式背景图，仅用于学习和展示。如有侵权，请联系知情。"
+    }
+
+
+    
+
+
+
+
+}

@@ -1,0 +1,57 @@
+{
+    "site": {
+        "title": "Pandora's Archives",
+        "description": "Records, collections and memories"
+    },
+    "common": {
+        "enter": "Enter",
+        "welcome": "Welcome to my new website!",
+        "description": "I just bought this domain, take a look",
+        "loading": [
+            "Brewing some coffee…",
+            "Tidying up my desk…",
+            "Taking a short pause…",
+            "Flipping through some notes…",
+            "Watching the world outside…"
+        ],
+        "username": "Username",
+        "write_article_button": "Blog",
+        "search_placeholder": "Search content...",
+        "general": "General",
+        "my_archive": "My Archive",
+        "my_project": "My Projects",
+        "about_website": "About This Website",
+        "my_drive": "My Drive",
+        "tool_box": "Toolbox",
+        "profession": "Profession"
+    },
+    "brand": {
+        "title1": "Pandora",
+        "title2": "'s",
+        "title3": "Archive"
+    },
+    "introduce": "A developer who loves creating",
+    "highlight": {
+        "title1": "Highlights",
+        "title2": "Moments Worth Remembering",
+        "desc1": "With brief words",
+        "desc2": "recording the little moments of this life journey",
+        "desc3": "That was who I once was, kept for future remembrance",
+        "unlock_button": "Unlock",
+        "item1_desc": "This is the first description",
+        "item2_desc": "This is the second description",
+        "item3_desc": "This is the third description"
+    },
+    "minecraft": {
+        "title": "Minecraft Server Permanently Open",
+        "desc1": "Free Building",
+        "desc2": "Casual & Relaxed",
+        "desc3": "Friends Server"
+    },
+    "world": {
+        "button": {
+            "menu": "Back to Home"
+        },
+        "info": "Assets are sourced from the story mode background images of the game Arcaea, used only for learning and display purposes. If there are any concerns, please contact the relevant party."
+    }
+}

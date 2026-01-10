@@ -1,0 +1,703 @@
+.container {
+  min-height: 100vh;
+
+  max-width: 100vw;
+  margin-top: 64px;
+}
+
+/* Header 与 背景图处理 */
+.header {
+  height: 300px;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.header:hover .headerBgImage {
+  transform: scale(1.05);
+}
+
+.headerBgImage {
+
+  position: fixed;
+  z-index: 0;
+  background-image: url("/r2/media/blog_header.png");
+  background-size: cover;
+  /* 关键 */
+  /* 关键 */
+  background-position: 100%;
+  /* 调整垂直百分比，让图片上方更多内容显示出来 */
+  width: 100vw;
+  min-height: 300px;
+  z-index: -2;
+  transition: transform 0.6s ease;
+}
+
+.headerOverlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+  z-index: 1;
+}
+
+.headerContent {
+  position: fixed;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.headerContent h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  display: inline-block;
+  margin: 0;
+  letter-spacing: 4px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, filter 0.3s ease;
+  pointer-events: all;
+}
+
+/* ---------- P 循环打字机效果 ---------- */
+.typingText {
+  display: inline-block;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0px 20px;
+}
+
+.mainContentContainer {
+  max-width: 100vw;
+}
+
+.mainContentWrapper {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, #a5c7ff 0%, #e0f2ff 100%);
+}
+
+/* 布局容器 */
+.mainContent {
+  width: auto;
+  max-width: 1400px;
+  padding: 50px 20px 40px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.waveWrapper {
+  position: absolute;
+  top: 280px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.waveWrapper svg {
+  width: 100%;
+  height: 100px;
+  display: block;
+}
+
+/* 功能区样式 */
+.functionArea {
+
+  position: sticky;
+  top: 75px;
+  z-index: 11000;
+}
+
+
+.functionTop {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.searchWrapper {
+  /* flex: 0 0 260px; */
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: none;
+  background: #d5e5ff;
+  backdrop-filter: blur(10px);
+  outline: none;
+  color: black;
+  transition: all 0.3s;
+}
+
+.searchInput:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #4a90e2;
+}
+
+.searchInput::placeholder {
+  color: #6a8dbd;
+}
+
+.searchInput:focus {
+
+  background: #ffffff !important;
+  color: #4a90e2 !important;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 自定义下拉菜单 */
+.dropdownWrapper {
+  position: relative;
+}
+
+.categoryBtn {
+  height: 100%;
+  padding: 10px 25px;
+  border-radius: 12px;
+  border: none;
+  background: #d5e5ff;
+  backdrop-filter: blur(10px);
+  color: #6a8dbd;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* --- 3. 分类按钮及下拉项 --- */
+.categoryBtn {
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+
+.categoryBtn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #4a90e2;
+}
+
+.btnActive {
+  /* background: white !important; */
+  color: #4a90e2 !important;
+  border-radius: 12px 12px 0 0;
+  /* 展开时圆角变化 */
+}
+
+.dropdownItem {
+  transition: background 0.2s, padding-left 0.2s;
+}
+
+.dropdownItem:hover {
+  background: rgba(165, 199, 255, 0.2);
+  padding-left: 25px;
+  /* Hover时向右轻微滑动 */
+  color: #4a90e2;
+}
+
+.dropdownMenu {
+  position: absolute;
+  left: 0;
+  width: 150px;
+  background: #d5e5ff;
+  backdrop-filter: blur(15px);
+  border-radius: 0 15px 15px 15px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+}
+
+.dropdownMenu.show {
+  max-height: 200px;
+  opacity: 1;
+  padding: 8px 0;
+}
+
+.dropdownItem {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6a8dbd;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdownItem:hover {
+  background: rgba(255, 255, 255, 0.4);
+  color: #333;
+}
+
+.tagList {
+  display: flex;
+  gap: 10px;
+}
+
+/* --- 2. 标签按钮交互 --- */
+.tagItem {
+  padding: 6px 18px;
+  border-radius: 10px;
+  border: none;
+  background: #c4daff;
+  color: #6a8dbd;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.tagItem:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+  color: #3b6ea5;
+}
+
+.tagActive {
+  background: #ffffff !important;
+  color: #4a90e2 !important;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tagItem:active {
+  transform: scale(0.95);
+}
+
+/* 内容网格布局 */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 25px;
+}
+
+/* 左侧列：两列卡片 */
+.blogCardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* 严格每行两个 */
+  gap: 20px;
+  margin-bottom: 30px;
+
+  padding: 20px 0;
+
+
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  z-index: 11;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pageArrow {
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  padding: 10px 35px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: 12px;
+}
+
+.pageNumbers span {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.activePage {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* --- 4. 分页按钮交互 --- */
+.pageArrow {
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.pageArrow:hover {
+  background: #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.pageArrow:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.pageNum,
+.activePage {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.pageNum:hover {
+  background: rgba(255, 255, 255, 0.4);
+  color: #4a90e2;
+}
+
+.activePage {
+  background: #ffffff;
+  color: #4a90e2;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  position: sticky;
+  top: 100px;
+  padding: 20px 0 0 0;
+}
+
+.rightColumn aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  position: sticky;
+  top: 75px;
+}
+
+.rightColumn h2 {
+  color: black;
+  font-size: 1.8rem;
+}
+
+/* 右侧栏 */
+.recentPanel {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.recentPanel h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.4rem;
+  color: black;
+}
+
+.recentItem {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.recentItem:hover {
+  transform: translateX(5px);
+}
+
+.recentItem img {
+  width: 90px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.recentDate {
+  font-size: 11px;
+  color: #bbb;
+}
+
+.recentText p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #333;
+}
+
+/* 补充样式 */
+.loading,
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 1.2rem;
+  grid-column: 1 / -1;
+  /* 占满整行 */
+}
+
+.statusText {
+  color: #555;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.resultCount {
+  color: #999;
+}
+
+.clearTags {
+  background: none;
+  border: 1px dashed red;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 6px 12px;
+  color: red;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.clearTags:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+/* 禁用分页按钮样式 */
+.pageArrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 容器设计 */
+.socialPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+}
+
+.socialItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  /* 默认暗色背景 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: white;
+}
+
+/* Hover 效果：轻微浮起 */
+.socialItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 头像与图标重叠设计 */
+.avatarWrapper {
+  position: relative;
+  margin-right: 12px;
+}
+
+.userAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+
+/* 平台特定颜色 */
+.bilibili {
+  background: #00aeec;
+  /* B站蓝 */
+  border-color: #00aeec;
+}
+
+.bilibili:hover {
+  background: #00aeec;
+  /* B站蓝 */
+  border-color: #00aeec;
+}
+
+.xPlatform {
+  background: #000000;
+  /* X 黑 */
+  border-color: #333;
+}
+
+.xPlatform:hover {
+  background: #000000;
+  /* X 黑 */
+  border-color: #333;
+}
+
+.github span {
+  color: black;
+}
+
+.github p {
+  color: gray;
+}
+
+/* 文字样式 */
+.socialInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.platformName {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.socialStatus {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* 容器设为相对定位，作为图标的基准 */
+.avatarWrapper {
+  position: relative;
+  width: 65px;
+  /* 略大于头像，留出边框空间 */
+  height: 65px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 统一两个平台图标的容器样式 */
+.platformIcon {
+  /* 假设 BilibiliIcon 渲染后的 class */
+  position: absolute;
+  bottom: -5px;
+  /* 贴在右下角 */
+  right: -5px;
+  width: 25px;
+  /* 统一图标大小 */
+  height: 25px;
+  background: #fff;
+  /* 给图标加白底，使其在头像上更清晰 */
+  border-radius: 50%;
+  padding: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* 头像基础样式 */
+.userAvatar {
+  min-height: 60px;
+  min-width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1200px) {
+
+  /* 左侧卡片变成每行一个 */
+  .blogCardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1000px) {
+  .contentGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rightColumn aside {
+    flex-direction: row;
+  }
+
+  .recentPanel {
+    flex: 2;
+  }
+
+  .socialPanelWrapper {
+    flex: 1;
+  }
+
+  .recentItem img {
+    width: 40%;
+    height: auto;
+  }
+
+  .recentText p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .functionTop {
+    flex-direction: column;
+  }
+
+  .tagList {
+    flex-wrap: wrap;
+  }
+
+  .rightColumn aside{
+    flex-direction: column;
+  }
+
+  .rightColumn{
+    padding: 0;
+  }
+
+  .blogCardGrid{
+    margin-bottom: 0;
+  }
+
+  .recentPanel{
+    margin-bottom: 30px;
+  }
+
+  .headerContent{
+    flex-direction: column;
+  }
+
+  .headerContent h1{
+    font-size: 2rem;
+  }
+
+   .headerContent p{
+    font-size: 1rem;
+  }
+
+  .header{
+    height: 200px;
+  }
+
+  .waveWrapper{
+    top:175px;
+  }
+}

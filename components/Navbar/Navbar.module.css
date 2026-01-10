@@ -1,0 +1,416 @@
+/* Navbar.module.css */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: rgb(198, 225, 255);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* 夜间模式样式变体 */
+.darkNavbar {
+  background: rgba(20, 20, 20, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #6366f1;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Navbar.module.css */
+
+/* 关键：强制中间菜单绝对居中 */
+.centerMenu {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 完美的水平偏移对齐 */
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  pointer-events: auto; /* 确保点击有效 */
+}
+
+.navLink {
+  /* 基础样式继承 coolBeans */
+  border: 2px solid #6366f1; /* 使用你的主题色代替 currentColor */
+  border-radius: 2rem;
+  color: #6366f1;
+  font-size: 0.9rem; /* 调整为适合导航栏的大小 */
+  font-weight: 500;
+  overflow: hidden;
+  padding: 0.4rem 1.2rem;
+  position: relative;
+  text-decoration: none;
+  transition: .2s transform ease-in-out;
+  will-change: transform;
+  z-index: 1; /* 确保文字在伪元素之上 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLink::after {
+  background-color: #6366f1;
+  border-radius: 2rem;
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* 初始状态：斜向左侧隐藏 */
+  transform: translate(-100%, 0) rotate(10deg);
+  transform-origin: top left;
+  transition: .2s transform ease-out;
+  will-change: transform;
+  z-index: -1;
+}
+
+.navLink:hover::after {
+  transform: translate(0, 0);
+}
+
+.navLink:hover {
+  border: 2px solid transparent;
+  color: #ffffff; /* 悬停时光标文字变为白色 */
+  transform: scale(1.1);
+}
+
+/* 如果是深色模式，可以微调颜色 */
+.darkNavbar .navLink {
+  border-color: #a5b4fc;
+  color: #a5b4fc;
+}
+.darkNavbar .navLink::after {
+  background-color: #a5b4fc;
+}
+.darkNavbar .navLink:hover {
+  color: #1e1e1e;
+}
+
+.rightSection {
+  position: relative;
+}
+
+.settingsTrigger {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.settingsTrigger:hover {
+  background: #6a8aff;
+}
+
+.mobileHamburger {
+  display: none; 
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.3s;
+  align-items: center;
+  border: none;
+  margin-right: 12px; /* 和右边的设置按钮拉开距离 */
+}
+
+.dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  
+  background: rgb(168, 201, 255);
+  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform-origin: top right;
+  animation: scaleIn 0.2s ease;
+  color: white;
+}
+
+.darkDropdown {
+  background: #2d2d2d;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.darkDropdown .dropItem {
+  color:white
+}
+
+.dropItem:hover {
+  background: rgba(118, 121, 255, 0.1);
+  color: white;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 语言子菜单网格 */
+.langOptionsGrid {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 10px;
+  margin-top: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+.langSubItem {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  transition: transform 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.langSubItem:hover {
+  background: white;
+  transform: scale(1.2);
+}
+
+.activeLang {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: scale(1.1);
+}
+
+.activeLang svg {
+  filter: drop-shadow(0 0 2px #6366f1);
+}
+
+/* 动画 */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 深色模式适配 */
+.darkNavbar .dropdown {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: rgba(255,255,255,0.1);
+  color: #eee;
+}
+
+.darkNavbar .dropItem {
+  color: #ccc;
+}
+
+.darkNavbar .langOptionsGrid {
+  background: rgba(255,255,255,0.05);
+}
+
+.darkNavbar .langSubItem:hover, 
+.darkNavbar .activeLang {
+  background: rgba(255,255,255,0.1);
+}
+
+
+
+
+
+/* =========================================
+   响应式与侧边栏样式
+   ========================================= */
+
+/* 默认隐藏汉堡按钮 */
+.mobileHamburger {
+  display: none; 
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.3s;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05); /* 稍微有点背景区别于设置按钮 */
+  border: none;
+  margin-right: 12px; /* 和右边的设置按钮拉开距离 */
+}
+
+.mobileHamburger:hover {
+  background: #6a8aff;
+}
+
+/* 遮罩层 (点击关闭侧边栏) */
+.sidebarOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1001; /* 比 Navbar(1000) 高 */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 侧边栏抽屉 */
+.sidebarDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px; /* 固定宽度 300px */
+  height: 100vh;
+  background: rgb(215, 235, 255); /* 浅色背景 */
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+  z-index: 1002; /* 最高层级 */
+  transform: translateX(100%); /* 默认移出屏幕 */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.darkDrawer {
+  background: #1e1e1e;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+.darkDrawer .sidebarHeader {
+  color: #fff;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+  padding: 0 10px;
+}
+
+/* 侧边栏网格布局 */
+.sidebarGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 每行两个格子 */
+  gap: 15px; /* 格子间距 */
+}
+
+/* 侧边栏里的按钮样式 */
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 600;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.sidebarLink:hover {
+  background: #6366f1;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* 深色模式下的按钮 */
+.darkDrawer .sidebarLink {
+  background: rgba(255, 255, 255, 0.05);
+  color: #a5b4fc;
+}
+.darkDrawer .sidebarLink:hover {
+  background: #a5b4fc;
+  color: #1e1e1e;
+}
+
+/* === 媒体查询：小于 768px 时生效 === */
+@media (max-width: 768px) {
+  /* 1. 隐藏原本的中间菜单 */
+  .centerMenu {
+    display: none;
+  }
+
+  /* 2. 显示汉堡按钮 */
+  .mobileHamburger {
+    display: flex;
+  }
+  
+  /* 调整 navbar padding 以适应小屏幕 */
+  .navbar {
+    padding: 0 1rem;
+  }
+
+  .rightSection{
+    display: flex;
+  }
+}
