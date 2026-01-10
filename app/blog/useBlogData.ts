@@ -30,6 +30,7 @@ export const useBlogData = () => {
   // 1. 获取数据
   useEffect(() => {
     // 确保 ASSET_BASE_URL 在 Next.js 环境变量中正确配置
+    console.log(ASSET_BASE_URL);
     fetch(`${ASSET_BASE_URL}/posts.json`)
       .then(res => res.json())
       .then(data => {
