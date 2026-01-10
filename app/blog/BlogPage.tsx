@@ -85,6 +85,24 @@ const BlogPage: React.FC = () => {
         }));
     }, [allCategories]);
 
+    // 侦测功能区到顶后包上背景图
+    const functionAreaRef = useRef(null);
+    const sentinelRef = useRef(null);
+    const [isStuck, setIsStuck] = useState(false);
+
+    useEffect(() => {
+        const sentinel = sentinelRef.current;
+        if (!sentinel) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+            setIsStuck(!entry.isIntersecting);
+        });
+
+        observer.observe(sentinel);
+
+        return () => observer.disconnect();
+    }, []);
+
     // if (loading) return <div className={styles.loading}>加载中...</div>;
 
     return (
@@ -126,7 +144,11 @@ const BlogPage: React.FC = () => {
                 <div className={styles.mainContentWrapper}>
                     <main className={styles.mainContent}>
                         {/* 功能区 */}
-                        <section className={styles.functionArea}>
+                        <div ref={sentinelRef} style={{ height: 1 }} />
+                        <section
+                            ref={functionAreaRef}
+                            className={`${styles.functionArea} ${isStuck ? styles.stuck : ''}`}
+                        >
                             <div className={styles.functionTop}>
                                 <div className={styles.searchWrapper}>
                                     <input

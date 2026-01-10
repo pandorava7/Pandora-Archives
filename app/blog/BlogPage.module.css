@@ -115,10 +115,20 @@ html.dark .mainContentWrapper{
 
 /* 功能区样式 */
 .functionArea {
-
   position: sticky;
   top: 75px;
-  z-index: 11000;
+  z-index: 100;
+  transition: background 0.25s;
+  background: transparent;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.stuck {
+  backdrop-filter: blur(10px);
+  background: rgba(243, 251, 255, 0.5);
+  /* 或你喜欢的 */
 }
 
 
