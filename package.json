@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/generate-posts.js",
+    "prebuild": "node scripts/generate-posts.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -19,7 +21,9 @@
     "react-markdown": "^10.1.0",
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "strip-markdown": "^6.0.0"
   },
   "devDependencies": {
     "@svgr/plugin-svgo": "^8.1.0",
