@@ -1,15 +1,14 @@
 "use client"
 
 // 1. React 核心
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // 2. Next.js 核心与内置组件
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 // 3. 第三方库
-import { Folder, Clock, Hash, X, Coffee, BookOpen, Tag } from 'lucide-react';
+import { Folder, Clock, Hash, X, Coffee, BookOpen, Tag, SquarePen } from 'lucide-react';
 
 // 4. 常量
 import { ASSET_BASE_URL } from '@/config/assets';
@@ -26,13 +25,21 @@ import BlogCard from './components/BlogCard';
 import waveStyles from '@/assets/css/Waves.module.css'
 
 
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+    '游戏人生': <Folder size={16} />,
+    '技术分享': <Clock size={16} />,
+    '见解看法': <Hash size={16} />,
+    '生活记录': <Coffee size={16} />,
+    '开发日志': <BookOpen size={16} />,
+};
+
+const FALLBACK_ICON = <Tag size={16} />;
+
+
 
 const BlogPage: React.FC = () => {
 
-    const router = useRouter();
-
     const {
-        loading,
         currentPosts,
         recentPosts,
         totalPages,
@@ -68,22 +75,10 @@ const BlogPage: React.FC = () => {
         );
     };
 
-    const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-        '游戏人生': <Folder size={16} />,
-        '技术分享': <Clock size={16} />,
-        '见解看法': <Hash size={16} />,
-        '生活记录': <Coffee size={16} />,
-        '开发日志': <BookOpen size={16} />,
-    };
-
-    const FALLBACK_ICON = <Tag size={16} />;
-
-    const displayCategories = useMemo(() => {
-        return allCategories.map(catName => ({
-            name: catName,
-            icon: CATEGORY_ICONS[catName] || FALLBACK_ICON
-        }));
-    }, [allCategories]);
+    const displayCategories = allCategories.map(catName => ({
+        name: catName,
+        icon: CATEGORY_ICONS[catName] || FALLBACK_ICON
+    }));
 
     // 侦测功能区到顶后包上背景图
     const functionAreaRef = useRef(null);
@@ -149,6 +144,12 @@ const BlogPage: React.FC = () => {
                             ref={functionAreaRef}
                             className={`${styles.functionArea} ${isStuck ? styles.stuck : ''}`}
                         >
+                            <div className={styles.functionActions}>
+                                <Link href="/blog/manage" className={styles.editorEntry}>
+                                    <SquarePen size={16} /> 管理博客
+                                </Link>
+                            </div>
+
                             <div className={styles.functionTop}>
                                 <div className={styles.searchWrapper}>
                                     <input
@@ -215,7 +216,7 @@ const BlogPage: React.FC = () => {
                                     <div className={styles.statusText}>
                                         正在显示:
                                         {selectedCategory && <span> [{selectedCategory}] </span>}
-                                        {searchQuery && <span> 包含"{searchQuery}" </span>}
+                                        {searchQuery && <span> 包含“{searchQuery}” </span>}
                                         {selectedTags.length > 0 && <span> 标签: {selectedTags.join('+')} </span>}
                                         <span className={styles.resultCount}> (共 {currentPosts.length} 篇)</span>
                                     </div>

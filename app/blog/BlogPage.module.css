@@ -125,6 +125,32 @@ html.dark .mainContentWrapper{
   border-radius: 12px;
 }
 
+.functionActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.editorEntry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(74, 144, 226, 0.12);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editorEntry:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(74, 144, 226, 0.18);
+}
+
 .stuck {
   backdrop-filter: blur(10px);
   background: rgba(243, 251, 255, 0.5);

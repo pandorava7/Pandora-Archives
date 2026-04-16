@@ -1,0 +1,589 @@
+.pageShell {
+  min-height: 100vh;
+  margin-top: 64px;
+  background:
+    radial-gradient(circle at top left, rgba(178, 251, 255, 0.6), transparent 28%),
+    linear-gradient(180deg, #a5c7ff 0%, #e0f2ff 45%, #f4fbff 100%);
+}
+
+.heroHeader {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+}
+
+.heroBackdrop,
+.loginBackdrop {
+  position: absolute;
+  inset: 0;
+  background-image: url('/r2/media/blog_header.png');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12, 34, 68, 0.28), rgba(16, 30, 52, 0.72));
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  color: white;
+}
+
+.heroEyebrow,
+.loginEyebrow {
+  margin-bottom: 8px;
+  font-size: 0.84rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.heroContent h1,
+.loginCard h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin-bottom: 12px;
+}
+
+.heroSubtitle,
+.loginDescription {
+  max-width: 560px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.heroActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.manageLayout {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.sidebarPanel,
+.editorPanel,
+.loginCard {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 28px;
+  background: rgba(248, 252, 255, 0.75);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 45px rgba(35, 84, 148, 0.12);
+}
+
+.sidebarPanel {
+  padding: 20px;
+  position: sticky;
+  top: 88px;
+  height: fit-content;
+}
+
+.sidebarTopBar,
+.editorToolbar,
+.panelHeader,
+.fieldLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sidebarTopBar h2,
+.editorToolbar h2,
+.panelHeader h3 {
+  color: #123768;
+}
+
+.sidebarTopBar p,
+.editorToolbar p {
+  color: #58779c;
+  font-size: 0.92rem;
+}
+
+.editorToolbar p code {
+  color: #264c85;
+  background: rgba(213, 229, 255, 0.8);
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+.searchBox {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(213, 229, 255, 0.78);
+  color: #5277a9;
+}
+
+.searchBox input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #26466f;
+  font-family: inherit;
+}
+
+.filterRow,
+.toolbarActions,
+.previewModeTabs,
+.quickInsertRow,
+.editorStats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filterRow {
+  margin-top: 16px;
+}
+
+.filterChip,
+.filterChipActive,
+.inlineButton,
+.ghostButton,
+.secondaryButton,
+.primaryButton,
+.dangerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+}
+
+.filterChip {
+  background: rgba(196, 218, 255, 0.8);
+  color: #416b9f;
+}
+
+.filterChipActive,
+.primaryButton {
+  background: linear-gradient(135deg, #5f92eb, #7ad6ff);
+  color: white;
+  box-shadow: 0 12px 24px rgba(73, 133, 222, 0.2);
+}
+
+.ghostButton,
+.secondaryButton,
+.inlineButton {
+  background: rgba(255, 255, 255, 0.74);
+  color: #24466b;
+}
+
+.dangerButton {
+  background: rgba(255, 225, 229, 0.88);
+  color: #af2d46;
+}
+
+.filterChip:hover,
+.filterChipActive:hover,
+.inlineButton:hover,
+.ghostButton:hover,
+.secondaryButton:hover,
+.primaryButton:hover,
+.dangerButton:hover,
+.postCard:hover,
+.postCardActive:hover {
+  transform: translateY(-2px);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled,
+.inlineButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.postList {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.postCard,
+.postCardActive {
+  width: 100%;
+  border: 1px solid transparent;
+  text-align: left;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #20405f;
+  cursor: pointer;
+}
+
+.postCardActive {
+  border-color: rgba(95, 146, 235, 0.42);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(221, 239, 255, 0.95));
+}
+
+.postCard strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.postCard p {
+  color: #54718f;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.postCardHeader,
+.postMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.postStatus {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(95, 146, 235, 0.14);
+  color: #37639e;
+  font-size: 0.8rem;
+}
+
+.postDate,
+.postMetaRow {
+  color: #6f89a7;
+  font-size: 0.82rem;
+}
+
+.editorPanel {
+  padding: 24px;
+}
+
+.warningBanner,
+.successBanner,
+.errorBanner,
+.loadingState,
+.emptyState {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.warningBanner {
+  background: rgba(255, 244, 211, 0.9);
+  color: #825b00;
+}
+
+.successBanner {
+  background: rgba(226, 255, 241, 0.92);
+  color: #136a48;
+}
+
+.errorBanner,
+.errorText {
+  background: rgba(255, 229, 234, 0.92);
+  color: #9a2146;
+}
+
+.loadingState,
+.emptyState {
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
+  color: #557292;
+}
+
+.spinIcon {
+  animation: spin 1s linear infinite;
+}
+
+.metaGrid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fieldBlock,
+.fieldBlockWide {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldBlockWide {
+  grid-column: 1 / -1;
+}
+
+.fieldLabel {
+  color: #1d426a;
+  font-size: 0.92rem;
+}
+
+.textInput,
+.textAreaCompact,
+.editorTextArea {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: rgba(213, 229, 255, 0.72);
+  color: #173759;
+  font-family: inherit;
+}
+
+.textAreaCompact {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.editorStats {
+  margin-top: 18px;
+  color: #58779c;
+}
+
+.editorStats span {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.coverPreviewCard {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.coverPreviewCard p {
+  color: #6783a1;
+  line-height: 1.6;
+}
+
+.coverPreviewImage {
+  width: 120px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.previewModeTabs,
+.quickInsertRow {
+  margin-top: 18px;
+}
+
+.workspaceSplit,
+.workspaceSingle {
+  margin-top: 18px;
+  display: grid;
+  gap: 18px;
+}
+
+.workspaceSplit {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workspaceSingle {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workspacePanel {
+  min-width: 0;
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.editorTextArea {
+  min-height: 640px;
+  resize: vertical;
+  line-height: 1.75;
+}
+
+.previewArticle {
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(241, 249, 255, 0.95), rgba(255, 255, 255, 0.96));
+}
+
+.previewHeader {
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid rgba(163, 199, 255, 0.28);
+}
+
+.previewCategory {
+  display: inline-flex;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(95, 146, 235, 0.12);
+  color: #2d5e98;
+  font-size: 0.82rem;
+}
+
+.previewHeader h2 {
+  margin: 12px 0 10px;
+  color: #123768;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.previewHeader p {
+  color: #6481a0;
+}
+
+.previewMarkdown {
+  padding: 22px;
+  color: #24334c;
+  line-height: 1.85;
+}
+
+.previewMarkdown h1,
+.previewMarkdown h2,
+.previewMarkdown h3,
+.previewMarkdown h4 {
+  color: #113561;
+  margin: 1.4em 0 0.6em;
+}
+
+.previewMarkdown p,
+.previewMarkdown ul,
+.previewMarkdown ol,
+.previewMarkdown blockquote,
+.previewMarkdown table {
+  margin-bottom: 1em;
+}
+
+.previewMarkdown code {
+  background: rgba(25, 31, 42, 0.88);
+  color: #cfe7ff;
+  padding: 0.15em 0.35em;
+  border-radius: 8px;
+}
+
+.previewMarkdown pre {
+  overflow-x: auto;
+  border-radius: 18px;
+}
+
+.loginShell {
+  min-height: calc(100vh - 64px);
+  position: relative;
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #a5c7ff 0%, #ebf6ff 100%);
+}
+
+.loginCard {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 480px);
+  padding: 32px;
+}
+
+.loginForm {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .manageLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebarPanel {
+    position: static;
+  }
+
+  .postList {
+    max-height: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroContent,
+  .editorToolbar,
+  .sidebarTopBar,
+  .panelHeader,
+  .fieldLabelRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .workspaceSplit,
+  .metaGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pageShell,
+  .loginShell {
+    margin-top: 56px;
+  }
+
+  .heroContent,
+  .manageLayout,
+  .loginCard,
+  .editorPanel,
+  .sidebarPanel {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
