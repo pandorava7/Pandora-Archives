@@ -23,7 +23,9 @@ import styles from './BlogPage.module.css';
 import { useBlogData } from './useBlogData';
 import BlogCard from './components/BlogCard';
 import waveStyles from '@/assets/css/Waves.module.css'
+import { playClick } from '@/utils/sfx';
 
+const BLOG_ENTER_EVENT = 'pandora:blog-enter';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
     '游戏人生': <Folder size={16} />,
@@ -56,6 +58,7 @@ const BlogPage: React.FC = () => {
     } = useBlogData();
 
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+    const [hasEntered, setHasEntered] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // 点击外部关闭下拉
@@ -68,6 +71,23 @@ const BlogPage: React.FC = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        if (hasEntered) return;
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [hasEntered]);
+
+    const enterBlog = () => {
+        playClick();
+        window.dispatchEvent(new Event(BLOG_ENTER_EVENT));
+        setHasEntered(true);
+    };
 
     const toggleTag = (tag: string) => {
         setSelectedTags(prev =>
@@ -102,6 +122,26 @@ const BlogPage: React.FC = () => {
 
     return (
         <div className={styles.container}>
+            {!hasEntered && (
+                <div className={styles.enterOverlay}>
+                    <video
+                        className={styles.enterVideo}
+                        src={`${ASSET_BASE_URL}/r2/media/enter-page.mp4`}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                    />
+                    <div className={styles.enterShade} />
+                    <div className={styles.enterContent}>
+                        <p className={styles.enterKicker}>Pandora Archives</p>
+                        <h2>进入博客</h2>
+                        <button type="button" className={styles.enterButton} onClick={enterBlog}>
+                            点击进入
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <header className={styles.header}>
                 <div className={styles.headerBgImage} />

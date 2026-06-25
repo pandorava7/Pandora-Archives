@@ -186,6 +186,177 @@
   color: white;
 }
 
+.itemStatus {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.musicWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.musicPanel {
+  margin: 4px 4px 8px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.35);
+  color: #35527c;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.2s ease;
+}
+
+.darkDropdown .musicPanel,
+.darkNavbar .musicPanel {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8edff;
+}
+
+.musicNow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  font-size: 0.82rem;
+}
+
+.musicNow span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playButton {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: #fff;
+  background: #6366f1;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.playButton:hover {
+  background: #4f72e8;
+  transform: translateY(-1px);
+}
+
+.autoPlayRow {
+  border: none;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 9px 10px;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.darkDropdown .autoPlayRow,
+.darkNavbar .autoPlayRow {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.switch {
+  width: 38px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(74, 82, 120, 0.25);
+  padding: 2px;
+  flex: 0 0 auto;
+  transition: background 0.2s;
+}
+
+.switch span {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.switchOn {
+  background: #6366f1;
+}
+
+.switchOn span {
+  transform: translateX(18px);
+}
+
+.trackList {
+  max-height: 178px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 2px;
+}
+
+.trackItem {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.28);
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.trackItem:hover {
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateX(2px);
+}
+
+.darkDropdown .trackItem,
+.darkNavbar .trackItem {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.trackActive {
+  background: #fff;
+  color: #4a62c9;
+  font-weight: 700;
+}
+
+.darkDropdown .trackActive,
+.darkNavbar .trackActive {
+  background: rgba(165, 180, 252, 0.22);
+  color: #ffffff;
+}
+
+.trackMark {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  flex: 0 0 auto;
+}
+
+.trackActive .trackMark {
+  background: currentColor;
+}
+
+.emptyMusic {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: rgba(53, 82, 124, 0.8);
+}
+
 .menuGlyph {
   width: 18px;
   height: 18px;

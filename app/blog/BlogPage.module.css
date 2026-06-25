@@ -5,6 +5,77 @@
   margin-top: 64px;
 }
 
+.enterOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #081125;
+}
+
+.enterVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.enterShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 17, 37, 0.22), rgba(8, 17, 37, 0.62)),
+    radial-gradient(circle at 50% 35%, rgba(178, 251, 255, 0.22), transparent 44%);
+}
+
+.enterContent {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.enterKicker {
+  color: #b2fbff;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+
+.enterContent h2 {
+  margin: 0;
+  font-size: 3.5rem;
+  color: #ffffff;
+}
+
+.enterButton {
+  min-width: 156px;
+  border: 2px solid rgba(178, 251, 255, 0.8);
+  border-radius: 999px;
+  padding: 12px 28px;
+  color: #ffffff;
+  background: rgba(106, 138, 255, 0.35);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.enterButton:hover {
+  transform: translateY(-2px);
+  background: rgba(106, 138, 255, 0.58);
+  border-color: #ffffff;
+}
+
 /* Header 与 背景图处理 */
 .header {
   height: 300px;
