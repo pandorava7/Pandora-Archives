@@ -1,12 +1,18 @@
 /* 全局容器：延续蓝色渐变背景 */
 .container {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
   background: linear-gradient(180deg, #a5c7ff 0%, #e0f2ff 100%);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #333;
   padding-bottom: 80px;
   padding-top: 64px ;
+}
+
+:global(html.dark) .container {
+  background: linear-gradient(180deg, rgb(30 30 30) 0%, #111827 100%);
+  color: #d8e4f2;
 }
 
 /* --- Hero 区域 (顶部大图) --- */
@@ -18,38 +24,46 @@
   align-items: center;
   justify-content: center;
   margin-bottom: -300px; /* 让下方内容卡片“插入”图片区域 */
+  overflow: hidden;
 }
 
 .heroBg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 420px;
   object-fit: cover;
   z-index: 0;
 }
 
 .heroOverlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 420px;
   background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(165, 199, 255, 0.8));
   z-index: 1;
 }
 
+:global(html.dark) .heroOverlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(17, 24, 39, 0.9));
+}
+
 /* 顶部导航栏 (返回按钮) */
 .navBar {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
   z-index: 10;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .backBtn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   background: rgba(255, 255, 255, 0.6);
@@ -61,9 +75,7 @@
   font-weight: 500;
   color: #333;
   transition: all 0.3s ease;
-  position: fixed;
-  left: 50px;
-  top: 64+50px;
+  text-decoration: none;
 }
 
 .backBtn:hover {
@@ -82,6 +94,7 @@
   display: grid;
   grid-template-columns: 1fr; /* 默认单列，如果是宽屏可改为 1fr 250px 加目录 */
   gap: 30px;
+  min-width: 0;
 }
 
 /* --- 文章卡片主体 --- */
@@ -106,6 +119,14 @@
   /* 新增：CSS 属性，告诉浏览器这个容器内容很多，滚出屏幕外就不渲染了 */
   content-visibility: auto; 
   contain-intrinsic-size: 1000px; /* 给个预估高度防止滚动条跳动 */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:global(html.dark) .articleCard {
+  background: #172033;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
 }
 
 /* 标题区 */
@@ -114,6 +135,10 @@
   margin-bottom: 50px;
   border-bottom: 1px solid #eee;
   padding-bottom: 30px;
+}
+
+:global(html.dark) .articleHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .title {
@@ -125,6 +150,10 @@
   letter-spacing: -0.5px;
 }
 
+:global(html.dark) .title {
+  color: #e8f1ff;
+}
+
 .metaRow {
   display: flex;
   justify-content: center;
@@ -134,12 +163,21 @@
   align-items: center;
 }
 
+:global(html.dark) .metaRow {
+  color: #9fb4cc;
+}
+
 .categoryTag {
   background: #e6f0ff;
   color: #4a90e2;
   padding: 4px 12px;
   border-radius: 8px;
   font-weight: 600;
+}
+
+:global(html.dark) .categoryTag {
+  background: rgba(106, 138, 255, 0.18);
+  color: #9fc2ff;
 }
 
 /* --- Markdown 内容样式 (核心) --- */
@@ -151,20 +189,42 @@
   color: #374151; /* 舒适的深灰色 */
 }
 
+:global(html.dark) .markdownContent {
+  color: #d7e2ef;
+}
+
 /* 标题 */
 .markdownContent h1,
 .markdownContent h2,
-.markdownContent h3 {
+.markdownContent h3,
+.markdownContent h4,
+.markdownContent h5,
+.markdownContent h6 {
   color: #1a202c;
   margin-top: 2em;
   margin-bottom: 0.8em;
   font-weight: 700;
+  line-height: 1.35;
+}
+
+:global(html.dark) .markdownContent h1,
+:global(html.dark) .markdownContent h2,
+:global(html.dark) .markdownContent h3,
+:global(html.dark) .markdownContent h4,
+:global(html.dark) .markdownContent h5,
+:global(html.dark) .markdownContent h6 {
+  color: #f0f6ff;
 }
 
 .markdownContent h1 {
   font-size: 2.2rem;
   padding-bottom: 10px;
   border-bottom: 2px solid #f0f4f8; /* 浅色分割线 */
+}
+
+:global(html.dark) .markdownContent h1,
+:global(html.dark) .markdownContent h2 {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
 }
 
 .markdownContent h2 {
@@ -177,10 +237,45 @@
   font-size: 1.4rem;
 }
 
+.markdownContent h4 {
+  font-size: 1.18rem;
+}
+
+.markdownContent h5 {
+  font-size: 1.05rem;
+}
+
+.markdownContent h6 {
+  font-size: 0.95rem;
+  color: #667085;
+}
+
 /* 段落 */
 .markdownContent p {
   margin-bottom: 1.5em;
   text-align: justify; /* 两端对齐更整齐 */
+}
+
+.markdownContent strong {
+  color: #1f2937;
+  font-weight: 800;
+}
+
+:global(html.dark) .markdownContent strong {
+  color: #f3f7ff;
+}
+
+.markdownContent em {
+  color: #475569;
+}
+
+:global(html.dark) .markdownContent em,
+:global(html.dark) .markdownContent li {
+  color: #c4d2e4;
+}
+
+.markdownContent del {
+  color: #8793a3;
 }
 
 /* 引用块 Blockquote */
@@ -194,12 +289,18 @@
   font-style: italic;
 }
 
+:global(html.dark) .markdownContent blockquote {
+  background: rgba(106, 138, 255, 0.12);
+  border-left-color: #7aa7ff;
+  color: #cbd8e8;
+}
+
 .markdownContent blockquote p {
   margin-bottom: 0;
 }
 
 /* 列表 */
-.markdownContent ul, 
+.markdownContent ul,
 .markdownContent ol {
   margin-bottom: 1.5em;
   padding-left: 2em;
@@ -208,6 +309,65 @@
 .markdownContent li {
   margin-bottom: 0.5em;
   color: #4a5568;
+}
+
+.markdownContent li > ul,
+.markdownContent li > ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.6em;
+}
+
+.markdownContent input[type='checkbox'] {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.55em;
+  accent-color: #4a90e2;
+  vertical-align: -0.12em;
+}
+
+.markdownContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px #dbe8f7;
+}
+
+:global(html.dark) .markdownContent table {
+  box-shadow: 0 0 0 1px rgba(122, 167, 255, 0.22);
+}
+
+.markdownContent th,
+.markdownContent td {
+  border: 1px solid #dbe8f7;
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+:global(html.dark) .markdownContent th,
+:global(html.dark) .markdownContent td {
+  border-color: rgba(122, 167, 255, 0.22);
+}
+
+.markdownContent th {
+  background: #edf6ff;
+  color: #1d426a;
+  font-weight: 800;
+}
+
+:global(html.dark) .markdownContent th {
+  background: rgba(106, 138, 255, 0.16);
+  color: #cce0ff;
+}
+
+.markdownContent tr:nth-child(even) td {
+  background: #f8fbff;
+}
+
+:global(html.dark) .markdownContent tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* 代码块 */
@@ -225,6 +385,13 @@
   font-size: 0.9em;
 }
 
+.markdownContent pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
 /* 行内代码 (`const a = 1`) */
 .markdownContent p code,
 .markdownContent li code {
@@ -235,12 +402,18 @@
   font-weight: 500;
 }
 
+:global(html.dark) .markdownContent p code,
+:global(html.dark) .markdownContent li code {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ff9ccc;
+}
+
 /* 图片 */
 .markdownContent img {
   max-width: 100%;
   height: auto;
   border-radius: 12px;
-  margin: 2em auto;
+  margin: 2em 0;
   display: block;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: transform 0.3s ease;
@@ -248,6 +421,17 @@
 
 .markdownContent img:hover {
   transform: scale(1.02);
+}
+
+.markdownContent audio,
+.markdownContent video {
+  width: 100%;
+  margin: 1.6em 0;
+  border-radius: 12px;
+}
+
+.markdownContent video {
+  background: #111827;
 }
 
 /* 链接 */
@@ -271,14 +455,43 @@
   margin: 3em 0;
 }
 
+:global(html.dark) .markdownContent hr {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 /* --- 响应式适配 --- */
 @media (max-width: 768px) {
   .heroSection {
     height: 300px;
+    margin-bottom: -235px;
+  }
+
+  .heroBg,
+  .heroOverlay {
+    height: 320px;
+  }
+
+  .navBar {
+    top: 76px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .backBtn {
+    padding: 8px 12px;
+    font-size: 0.86rem;
   }
   
+  .mainLayout {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+
   .articleCard {
-    padding: 30px 20px;
+    width: 100%;
+    border-radius: 18px 18px 0 0;
+    padding: 30px 18px;
   }
   
   .title {
@@ -287,5 +500,32 @@
   
   .markdownContent {
     font-size: 1rem;
+    overflow-x: hidden;
+  }
+
+  .metaRow {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .markdownContent table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .markdownContent pre {
+    margin-left: -4px;
+    margin-right: -4px;
   }
 } 
+
+@media (max-width: 420px) {
+  .articleCard {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .title {
+    font-size: 1.65rem;
+  }
+}

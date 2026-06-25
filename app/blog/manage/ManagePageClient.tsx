@@ -1,6 +1,6 @@
 'use client';
 
-import { useDeferredValue, useEffect, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -15,6 +15,7 @@ import {
   ListTodo,
   LoaderCircle,
   LogOut,
+  Paperclip,
   PencilLine,
   RefreshCw,
   Save,
@@ -39,6 +40,16 @@ import styles from './ManagePage.module.css';
 type PreviewMode = 'split' | 'editor' | 'preview';
 type StatusFilter = 'all' | 'draft' | 'published' | 'draft-and-published';
 
+type UploadedAsset = {
+  path: string;
+  fileName: string;
+  contentType: string;
+};
+
+type SignedUploadTarget = UploadedAsset & {
+  uploadUrl: string;
+};
+
 type EditorState = {
   previousId: string | null;
   title: string;
@@ -52,6 +63,7 @@ type EditorState = {
 };
 
 const NEW_POST_STORAGE_KEY = 'blog-editor-local:draft-new';
+const CUSTOM_CATEGORY_VALUE = '__custom__';
 
 function createEmptyEditorState(): EditorState {
   return {
@@ -119,12 +131,46 @@ function buildCoverPreviewUrl(cover: string) {
   return `${ASSET_BASE_URL}/posts/${cover}`;
 }
 
+function resolveAssetUrl(value: unknown) {
+  const source = typeof value === 'string' ? value.trim() : '';
+  if (!source) {
+    return '';
+  }
+
+  if (/^(https?:|data:|blob:|#)/i.test(source) || source.startsWith('/')) {
+    return source;
+  }
+
+  const normalizedPath = source.replace(/^\/+/, '');
+  return ASSET_BASE_URL ? `${ASSET_BASE_URL.replace(/\/$/, '')}/${normalizedPath}` : `/${normalizedPath}`;
+}
+
+function createAssetMarkdown(asset: UploadedAsset) {
+  const assetPath = asset.path.replace(/^\/+/, '');
+  const label = asset.fileName.replace(/\.[^.]+$/, '') || '资源';
+
+  if (asset.contentType.startsWith('image/')) {
+    return `\n![${label}](${assetPath})\n`;
+  }
+
+  if (asset.contentType.startsWith('audio/')) {
+    return `\n<audio controls src="${assetPath}"></audio>\n`;
+  }
+
+  if (asset.contentType.startsWith('video/')) {
+    return `\n<video controls src="${assetPath}"></video>\n`;
+  }
+
+  return `\n[${asset.fileName}](${assetPath})\n`;
+}
+
 export default function ManagePageClient() {
   const markdownRef = useRef<HTMLTextAreaElement | null>(null);
 
   const [posts, setPosts] = useState<BlogEditorPostSummary[]>([]);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [editor, setEditor] = useState<EditorState>(createEmptyEditorState);
+  const [tagsText, setTagsText] = useState('');
   const [slugTouched, setSlugTouched] = useState(false);
   const [previewMode, setPreviewMode] = useState<PreviewMode>('split');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -132,6 +178,7 @@ export default function ManagePageClient() {
   const [loadingList, setLoadingList] = useState(true);
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [assetUploading, setAssetUploading] = useState(false);
   const [configErrors, setConfigErrors] = useState<string[]>([]);
   const [canWrite, setCanWrite] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -139,7 +186,6 @@ export default function ManagePageClient() {
   const [isDirty, setIsDirty] = useState(false);
 
   const deferredQuery = useDeferredValue(searchQuery);
-  const tagsText = editor.tags.join(', ');
   const readingMinutes = Math.max(1, Math.ceil(editor.markdown.length / 400));
   const wordCount = editor.markdown.replace(/\s+/g, '').length;
 
@@ -157,6 +203,21 @@ export default function ManagePageClient() {
       value.toLocaleLowerCase().includes(query),
     );
   });
+  const existingCategories = useMemo(
+    () =>
+      Array.from(new Set(posts.map((post) => post.category.trim()).filter(Boolean))).sort((left, right) =>
+        left.localeCompare(right, 'zh-CN'),
+      ),
+    [posts],
+  );
+  const existingTags = useMemo(
+    () =>
+      Array.from(new Set(posts.flatMap((post) => post.tags.map((tag) => tag.trim())).filter(Boolean))).sort(
+        (left, right) => left.localeCompare(right, 'zh-CN'),
+      ),
+    [posts],
+  );
+  const categoryUsesCustomInput = Boolean(editor.category) && !existingCategories.includes(editor.category);
 
   useEffect(() => {
     if (!isDirty) {
@@ -207,7 +268,7 @@ export default function ManagePageClient() {
           const nextState = localDraft ? (JSON.parse(localDraft) as EditorState) : createEmptyEditorState();
 
           setSelectedPostId(null);
-          setEditor(nextState);
+          applyEditorState(nextState);
           setSlugTouched(nextState.slug !== slugifyBlogTitle(nextState.title));
           setIsDirty(Boolean(localDraft));
           setError(null);
@@ -224,7 +285,7 @@ export default function ManagePageClient() {
         const restoredState = localDraft ? (JSON.parse(localDraft) as EditorState) : nextState;
 
         setSelectedPostId(initialId);
-        setEditor(restoredState);
+        applyEditorState(restoredState);
         setSlugTouched(restoredState.slug !== slugifyBlogTitle(restoredState.title));
         setConfigErrors(detail.configErrors);
         setIsDirty(Boolean(localDraft));
@@ -283,7 +344,7 @@ export default function ManagePageClient() {
       const restoredState = localDraft ? (JSON.parse(localDraft) as EditorState) : nextState;
 
       setSelectedPostId(id);
-      setEditor(restoredState);
+      applyEditorState(restoredState);
       setSlugTouched(restoredState.slug !== slugifyBlogTitle(restoredState.title));
       setConfigErrors(detail.configErrors);
       setIsDirty(Boolean(localDraft));
@@ -303,7 +364,7 @@ export default function ManagePageClient() {
     const localDraft = window.localStorage.getItem(NEW_POST_STORAGE_KEY);
     const nextState = localDraft ? (JSON.parse(localDraft) as EditorState) : createEmptyEditorState();
 
-    setEditor(nextState);
+    applyEditorState(nextState);
     setSlugTouched(nextState.slug !== slugifyBlogTitle(nextState.title));
     setIsDirty(Boolean(localDraft));
     setError(null);
@@ -312,6 +373,11 @@ export default function ManagePageClient() {
   function updateEditor<K extends keyof EditorState>(key: K, value: EditorState[K]) {
     setEditor((current) => ({ ...current, [key]: value }));
     setIsDirty(true);
+  }
+
+  function applyEditorState(nextState: EditorState) {
+    setEditor(nextState);
+    setTagsText(nextState.tags.join(', '));
   }
 
   function handleTitleChange(value: string) {
@@ -380,6 +446,65 @@ export default function ManagePageClient() {
     }
   }
 
+  function toggleTag(tag: string) {
+    const nextTags = editor.tags.includes(tag)
+      ? editor.tags.filter((item) => item !== tag)
+      : Array.from(new Set([...editor.tags, tag]));
+
+    setTagsText(nextTags.join(', '));
+    updateEditor('tags', nextTags);
+  }
+
+  async function handleAssetUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    setAssetUploading(true);
+    setError(null);
+
+    try {
+      const target = await apiRequest<SignedUploadTarget>('/api/admin/uploads/asset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type || 'application/octet-stream',
+          slug: editor.slug || editor.title || file.name,
+          date: editor.date,
+        }),
+      });
+
+      setMessage(`正在上传 ${file.name}...`);
+      const uploadResponse = await fetch(target.uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+        },
+        body: file,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`资源直传失败：${uploadResponse.status} ${uploadResponse.statusText}`);
+      }
+
+      insertMarkdown(createAssetMarkdown(target));
+      setMessage('资源已上传并插入正文。');
+    } catch (uploadError) {
+      setError(
+        uploadError instanceof Error
+          ? `${uploadError.message} 如果是浏览器 CORS 报错，请在 Cloudflare R2 为 sylunae-public-bucket 允许当前站点的 PUT 请求。`
+          : '上传资源失败。',
+      );
+    } finally {
+      setAssetUploading(false);
+      event.target.value = '';
+    }
+  }
+
   async function handleSave() {
     setSubmitting(true);
     setError(null);
@@ -407,7 +532,7 @@ export default function ManagePageClient() {
       const nextState = buildEditorStateFromDetail(detail);
 
       window.localStorage.removeItem(previousStorageKey);
-      setEditor(nextState);
+      applyEditorState(nextState);
       setSelectedPostId(nextState.previousId);
       setSlugTouched(nextState.slug !== slugifyBlogTitle(nextState.title));
       setIsDirty(false);
@@ -452,7 +577,7 @@ export default function ManagePageClient() {
       const nextState = buildEditorStateFromDetail(detail);
 
       window.localStorage.removeItem(previousStorageKey);
-      setEditor(nextState);
+      applyEditorState(nextState);
       setSelectedPostId(nextState.previousId);
       setSlugTouched(nextState.slug !== slugifyBlogTitle(nextState.title));
       setIsDirty(false);
@@ -478,7 +603,7 @@ export default function ManagePageClient() {
         },
       );
 
-      setEditor(buildEditorStateFromDetail(detail));
+      applyEditorState(buildEditorStateFromDetail(detail));
       setSelectedPostId(detail.draft.id);
       setIsDirty(false);
       setMessage('文章已撤回发布，公开页将不再显示。');
@@ -709,25 +834,68 @@ export default function ManagePageClient() {
               />
             </label>
 
-            <label className={styles.fieldBlock}>
+            <div className={styles.fieldBlock}>
               <span className={styles.fieldLabel}>分类</span>
-              <input
-                className={styles.textInput}
-                value={editor.category}
-                onChange={(event) => updateEditor('category', event.target.value)}
-                placeholder="例如：技术分享"
-              />
-            </label>
+              {existingCategories.length > 0 ? (
+                <select
+                  className={styles.textInput}
+                  value={categoryUsesCustomInput ? CUSTOM_CATEGORY_VALUE : editor.category}
+                  onChange={(event) => {
+                    const nextValue = event.target.value;
+                    updateEditor('category', nextValue === CUSTOM_CATEGORY_VALUE ? '' : nextValue);
+                  }}
+                >
+                  <option value="">选择已有分类</option>
+                  {existingCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                  <option value={CUSTOM_CATEGORY_VALUE}>新分类...</option>
+                </select>
+              ) : null}
+              {existingCategories.length === 0 || categoryUsesCustomInput || !editor.category ? (
+                <input
+                  className={styles.textInput}
+                  value={editor.category}
+                  onChange={(event) => updateEditor('category', event.target.value)}
+                  placeholder={existingCategories.length > 0 ? '输入新分类' : '例如：技术分享'}
+                />
+              ) : null}
+            </div>
 
-            <label className={styles.fieldBlockWide}>
+            <div className={styles.fieldBlockWide}>
               <span className={styles.fieldLabel}>标签</span>
               <input
                 className={styles.textInput}
                 value={tagsText}
-                onChange={(event) => updateEditor('tags', normalizeTagsInput(event.target.value))}
-                placeholder="用逗号分隔多个标签"
+                onChange={(event) => {
+                  setTagsText(event.target.value);
+                  updateEditor('tags', normalizeTagsInput(event.target.value));
+                }}
+                placeholder="点选已有标签，或用逗号新增标签"
               />
-            </label>
+              {existingTags.length > 0 ? (
+                <div className={styles.tagPicker} aria-label="已有标签">
+                  {existingTags.map((tag) => {
+                    const isSelected = editor.tags.includes(tag);
+
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        className={isSelected ? styles.tagChipActive : styles.tagChip}
+                        onClick={() => toggleTag(tag)}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className={styles.fieldHint}>发布过文章后，这里会显示可点选的已有标签。</p>
+              )}
+            </div>
 
             <label className={styles.fieldBlockWide}>
               <span className={styles.fieldLabel}>摘要</span>
@@ -742,8 +910,11 @@ export default function ManagePageClient() {
             <div className={styles.fieldBlockWide}>
               <div className={styles.fieldLabelRow}>
                 <span className={styles.fieldLabel}>封面</span>
-                <label className={styles.inlineButton}>
-                  <ImagePlus size={16} /> 上传封面
+                <label
+                  className={canWrite && !submitting ? styles.inlineButton : styles.inlineButtonDisabled}
+                  title={canWrite ? '上传封面图片' : '请先填写 R2 环境变量'}
+                >
+                  <ImagePlus size={16} /> {canWrite ? '上传封面' : '先配置环境变量'}
                   <input type="file" accept="image/*" hidden onChange={handleCoverUpload} disabled={!canWrite || submitting} />
                 </label>
               </div>
@@ -792,6 +963,20 @@ export default function ManagePageClient() {
             <button type="button" className={styles.inlineButton} onClick={() => insertMarkdown('\n![图片描述](https://example.com/image.png)\n')}>
               <PencilLine size={15} /> 图片
             </button>
+            <label
+              className={canWrite && !assetUploading ? styles.inlineButton : styles.inlineButtonDisabled}
+              title={canWrite ? '上传图片、音频、视频或附件，并插入到正文' : '请先填写 R2 环境变量'}
+            >
+              {assetUploading ? <LoaderCircle className={styles.spinIcon} size={15} /> : <Paperclip size={15} />}
+              {assetUploading ? '上传中' : '上传资源'}
+              <input
+                type="file"
+                accept="image/*,audio/*,video/*,.pdf,.zip,.txt,.md"
+                hidden
+                onChange={handleAssetUpload}
+                disabled={!canWrite || assetUploading}
+              />
+            </label>
           </div>
 
           <div className={styles.previewModeTabs}>
@@ -851,6 +1036,9 @@ export default function ManagePageClient() {
                       rehypePlugins={[rehypeRaw, rehypeHighlight]}
                       components={{
                         a: (props) => <a {...props} target="_blank" rel="noreferrer" />,
+                        img: ({ src, ...props }) => <img {...props} src={resolveAssetUrl(src)} alt={props.alt ?? ''} />,
+                        audio: ({ src, ...props }) => <audio {...props} src={resolveAssetUrl(src)} controls />,
+                        video: ({ src, ...props }) => <video {...props} src={resolveAssetUrl(src)} controls />,
                       }}
                     >
                       {editor.markdown || '### 预览区\n\n开始输入正文后，这里会实时显示渲染效果。'}

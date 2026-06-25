@@ -110,6 +110,11 @@
 .editorToolbar h2,
 .panelHeader h3 {
   color: #123768;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .sidebarTopBar p,
@@ -162,6 +167,7 @@
 .filterChip,
 .filterChipActive,
 .inlineButton,
+.inlineButtonDisabled,
 .ghostButton,
 .secondaryButton,
 .primaryButton,
@@ -199,6 +205,12 @@
   color: #24466b;
 }
 
+.inlineButtonDisabled {
+  background: rgba(255, 255, 255, 0.48);
+  color: #7f94aa;
+  cursor: not-allowed;
+}
+
 .dangerButton {
   background: rgba(255, 225, 229, 0.88);
   color: #af2d46;
@@ -219,7 +231,8 @@
 .primaryButton:disabled,
 .secondaryButton:disabled,
 .dangerButton:disabled,
-.inlineButton:disabled {
+.inlineButton:disabled,
+.inlineButtonDisabled:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
@@ -270,6 +283,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .postStatus {
@@ -365,6 +379,51 @@
   background: rgba(213, 229, 255, 0.72);
   color: #173759;
   font-family: inherit;
+}
+
+select.textInput {
+  cursor: pointer;
+}
+
+.fieldHint {
+  color: #6f89a7;
+  font-size: 0.86rem;
+}
+
+.tagPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.tagChip,
+.tagChipActive {
+  border: 1px solid rgba(95, 146, 235, 0.22);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.tagChip {
+  background: rgba(255, 255, 255, 0.72);
+  color: #416b9f;
+}
+
+.tagChipActive {
+  background: rgba(95, 146, 235, 0.9);
+  border-color: rgba(95, 146, 235, 0.9);
+  color: white;
+}
+
+.tagChip:hover,
+.tagChipActive:hover {
+  transform: translateY(-1px);
 }
 
 .textAreaCompact {
@@ -481,9 +540,42 @@
 .previewMarkdown h1,
 .previewMarkdown h2,
 .previewMarkdown h3,
-.previewMarkdown h4 {
+.previewMarkdown h4,
+.previewMarkdown h5,
+.previewMarkdown h6 {
   color: #113561;
-  margin: 1.4em 0 0.6em;
+  margin: 1.5em 0 0.65em;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.previewMarkdown h1 {
+  font-size: 2rem;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(95, 146, 235, 0.22);
+}
+
+.previewMarkdown h2 {
+  font-size: 1.65rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(95, 146, 235, 0.18);
+}
+
+.previewMarkdown h3 {
+  font-size: 1.35rem;
+}
+
+.previewMarkdown h4 {
+  font-size: 1.15rem;
+}
+
+.previewMarkdown h5 {
+  font-size: 1rem;
+}
+
+.previewMarkdown h6 {
+  font-size: 0.92rem;
+  color: #667c98;
 }
 
 .previewMarkdown p,
@@ -494,16 +586,139 @@
   margin-bottom: 1em;
 }
 
+.previewMarkdown p {
+  text-align: justify;
+}
+
+.previewMarkdown strong {
+  color: #142b4a;
+  font-weight: 800;
+}
+
+.previewMarkdown em {
+  color: #4f6480;
+}
+
+.previewMarkdown del {
+  color: #8392a5;
+}
+
+.previewMarkdown ul,
+.previewMarkdown ol {
+  padding-left: 1.7em;
+}
+
+.previewMarkdown li {
+  margin-bottom: 0.45em;
+}
+
+.previewMarkdown li > ul,
+.previewMarkdown li > ol {
+  margin-top: 0.45em;
+  margin-bottom: 0.55em;
+}
+
+.previewMarkdown input[type='checkbox'] {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  accent-color: #5f92eb;
+  vertical-align: -0.12em;
+}
+
+.previewMarkdown blockquote {
+  padding: 14px 18px;
+  border-left: 4px solid #5f92eb;
+  border-radius: 0 14px 14px 0;
+  background: rgba(213, 229, 255, 0.45);
+  color: #405979;
+}
+
+.previewMarkdown table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(95, 146, 235, 0.2);
+}
+
+.previewMarkdown th,
+.previewMarkdown td {
+  border: 1px solid rgba(95, 146, 235, 0.2);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.previewMarkdown th {
+  background: rgba(213, 229, 255, 0.72);
+  color: #1d426a;
+  font-weight: 800;
+}
+
+.previewMarkdown tr:nth-child(even) td {
+  background: rgba(248, 252, 255, 0.72);
+}
+
 .previewMarkdown code {
-  background: rgba(25, 31, 42, 0.88);
-  color: #cfe7ff;
+  background: rgba(25, 31, 42, 0.1);
+  color: #c02668;
   padding: 0.15em 0.35em;
   border-radius: 8px;
+  font-family: Consolas, Monaco, monospace;
 }
 
 .previewMarkdown pre {
   overflow-x: auto;
   border-radius: 18px;
+  padding: 18px;
+  margin: 1.6em 0;
+  background: #282c34;
+}
+
+.previewMarkdown pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+.previewMarkdown a {
+  color: #2d6fbe;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(45, 111, 190, 0.55);
+}
+
+.previewMarkdown a:hover {
+  background: rgba(95, 146, 235, 0.1);
+  border-bottom-style: solid;
+}
+
+.previewMarkdown hr {
+  border: 0;
+  height: 1px;
+  background: rgba(95, 146, 235, 0.22);
+  margin: 2.4em 0;
+}
+
+.previewMarkdown img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6em 0;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(35, 84, 148, 0.12);
+}
+
+.previewMarkdown audio,
+.previewMarkdown video {
+  width: 100%;
+  margin: 1.4em 0;
+  border-radius: 12px;
+}
+
+.previewMarkdown video {
+  background: #111827;
 }
 
 .loginShell {
@@ -557,6 +772,7 @@
 }
 
 @media (max-width: 900px) {
+
   .heroContent,
   .editorToolbar,
   .sidebarTopBar,
@@ -573,6 +789,7 @@
 }
 
 @media (max-width: 640px) {
+
   .pageShell,
   .loginShell {
     margin-top: 56px;

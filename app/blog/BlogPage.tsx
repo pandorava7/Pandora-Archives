@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 // 3. 第三方库
-import { Folder, Clock, Hash, X, Coffee, BookOpen, Tag, SquarePen } from 'lucide-react';
+import { Folder, Clock, Hash, X, Coffee, BookOpen, Tag } from 'lucide-react';
 
 // 4. 常量
 import { ASSET_BASE_URL } from '@/config/assets';
@@ -144,12 +144,6 @@ const BlogPage: React.FC = () => {
                             ref={functionAreaRef}
                             className={`${styles.functionArea} ${isStuck ? styles.stuck : ''}`}
                         >
-                            <div className={styles.functionActions}>
-                                <Link href="/blog/manage" className={styles.editorEntry}>
-                                    <SquarePen size={16} /> 管理博客
-                                </Link>
-                            </div>
-
                             <div className={styles.functionTop}>
                                 <div className={styles.searchWrapper}>
                                     <input

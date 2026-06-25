@@ -5,12 +5,13 @@ import { BLOG_EDITOR_DRAFT_PREFIX, BLOG_EDITOR_PUBLISHED_INDEX_KEY } from './con
 import {
   buildCoverUploadKey,
   buildPublishedLink,
+  buildPostResourceUploadKey,
   extractPlainText,
   parseFrontmatterDocument,
   serializeDraftToMarkdown,
 } from './content';
 import { getBlogEditorWriteConfigErrors, getBlogEditorEnv, isBlogEditorWriteConfigured } from './env';
-import { deleteR2Object, getR2Json, listR2Keys, putR2Json, putR2Object } from './r2';
+import { createR2PutSignedUrl, deleteR2Object, getR2Json, listR2Keys, putR2Json, putR2Object } from './r2';
 import { slugifyBlogTitle } from './slug';
 import {
   type BlogEditorDraft,
@@ -397,6 +398,39 @@ function normalizeUploadExtension(fileName: string, contentType: string) {
   return 'bin';
 }
 
+function getResourceFolder(contentType: string, extension: string) {
+  if (contentType.startsWith('image/')) {
+    return 'images';
+  }
+
+  if (contentType.startsWith('audio/')) {
+    return 'audio';
+  }
+
+  if (contentType.startsWith('video/')) {
+    return 'video';
+  }
+
+  if (contentType.startsWith('text/') || ['md', 'txt', 'csv', 'json', 'xml', 'yaml', 'yml'].includes(extension)) {
+    return 'text';
+  }
+
+  if (contentType === 'application/pdf' || ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(extension)) {
+    return 'documents';
+  }
+
+  if (
+    ['zip', 'rar', '7z', 'tar', 'gz'].includes(extension) ||
+    ['application/zip', 'application/x-7z-compressed', 'application/x-rar-compressed', 'application/gzip'].includes(
+      contentType,
+    )
+  ) {
+    return 'archives';
+  }
+
+  return 'other';
+}
+
 export async function uploadBlogCover(
   fileName: string,
   contentType: string,
@@ -404,15 +438,57 @@ export async function uploadBlogCover(
   slugHint: string,
   dateHint: string,
 ) {
-  const baseName = slugifyBlogTitle(slugHint || fileName.replace(/\.[^.]+$/, '')) || 'cover';
+  const postSlug = slugifyBlogTitle(slugHint) || 'untitled';
+  const baseName = slugifyBlogTitle(fileName.replace(/\.[^.]+$/, '')) || 'cover';
   const extension = normalizeUploadExtension(fileName, contentType);
   const uploadedFileName = `${baseName}-${Date.now()}.${extension}`;
-  const key = buildCoverUploadKey(dateHint, uploadedFileName);
+  const key = buildCoverUploadKey(dateHint, postSlug, uploadedFileName);
 
   await putR2Object(key, body, contentType, 'public, max-age=31536000, immutable');
 
   return {
     cover: key.replace(/^posts\//, ''),
     key,
+  };
+}
+
+export async function uploadBlogResource(
+  fileName: string,
+  contentType: string,
+  body: Uint8Array,
+  slugHint: string,
+  dateHint: string,
+) {
+  const postSlug = slugifyBlogTitle(slugHint) || 'untitled';
+  const fileSlug = slugifyBlogTitle(fileName.replace(/\.[^.]+$/, '')) || 'asset';
+  const extension = normalizeUploadExtension(fileName, contentType);
+  const resourceFolder = getResourceFolder(contentType, extension);
+  const uploadedFileName = `${fileSlug}-${Date.now()}.${extension}`;
+  const key = buildPostResourceUploadKey(dateHint, postSlug, resourceFolder, uploadedFileName);
+
+  await putR2Object(key, body, contentType, 'public, max-age=31536000, immutable');
+
+  return {
+    key,
+    path: key,
+    fileName,
+    contentType,
+  };
+}
+
+export function createBlogResourceUploadTarget(fileName: string, contentType: string, slugHint: string, dateHint: string) {
+  const postSlug = slugifyBlogTitle(slugHint) || 'untitled';
+  const fileSlug = slugifyBlogTitle(fileName.replace(/\.[^.]+$/, '')) || 'asset';
+  const extension = normalizeUploadExtension(fileName, contentType);
+  const resourceFolder = getResourceFolder(contentType, extension);
+  const uploadedFileName = `${fileSlug}-${Date.now()}.${extension}`;
+  const key = buildPostResourceUploadKey(dateHint, postSlug, resourceFolder, uploadedFileName);
+
+  return {
+    uploadUrl: createR2PutSignedUrl(key),
+    path: key,
+    key,
+    fileName,
+    contentType,
   };
 }

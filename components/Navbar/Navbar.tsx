@@ -17,7 +17,6 @@ import USIcon from "./icons/us.svg";
 import JPIcon from "./icons/jp.svg";
 import LanguageIcon from "./icons/language-svgrepo-com.svg";
 import { usePathname, useRouter } from 'next/navigation';
-import { UserData } from 'types/userData';
 
 interface NavbarProps {
   user: {
@@ -30,9 +29,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
   const pathname = usePathname();
   const hiddenRoutes = new Set(["/world", "/example"]);
   const shouldShowNavbar = !hiddenRoutes.has(pathname);
-  
-  // 如果不显示，直接返回 null
-  if (!shouldShowNavbar) return null;
 
   const { i18n } = useTranslation();
   const [isDark, setIsDark] = useState(false);
@@ -63,11 +59,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 监听路由变化自动关闭侧边栏（可选，增强体验）
-  useEffect(() => {
-    setIsSidebarOpen(false);
-  }, [pathname]);
-
   const changeLang = (lang: string) => {
     playClick();
     i18n.changeLanguage(lang);
@@ -89,6 +80,9 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
     { name: "世界", path: "/world" },
     { name: "友链", path: "/links" },
   ];
+
+  // 如果不显示，直接返回 null
+  if (!shouldShowNavbar) return null;
 
   return (
     <>
@@ -166,6 +160,11 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
               <div className={styles.dropItem} onClick={playClick}>
                 <Image src={MusicIcon} alt="Music" className='icon' />
                 <span>背景音乐</span>
+              </div>
+
+              <div className={styles.dropItem} onClick={(event) => handleNav(event, '/blog/manage')}>
+                <span className={styles.menuGlyph}>✎</span>
+                <span>管理博客</span>
               </div>
             </div>
           )}

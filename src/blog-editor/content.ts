@@ -17,8 +17,12 @@ export function buildPublishedLink(date: string, id: string) {
   return `${getDateYear(date)}/${id}.md`;
 }
 
-export function buildCoverUploadKey(date: string, fileName: string) {
-  return `posts/${getDateYear(date)}/${fileName}`;
+export function buildCoverUploadKey(date: string, slug: string, fileName: string) {
+  return `posts/${getDateYear(date)}/${slug || 'untitled'}/cover/${fileName}`;
+}
+
+export function buildPostResourceUploadKey(date: string, slug: string, resourceFolder: string, fileName: string) {
+  return `posts/${getDateYear(date)}/${slug || 'untitled'}/assets/${resourceFolder || 'other'}/${fileName}`;
 }
 
 export async function extractPlainText(markdown: string) {

@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { createHash, createHmac } from 'crypto';
 
 import { assertBlogEditorWriteConfigured, getBlogEditorEnv } from './env';
 
@@ -60,6 +61,28 @@ function isMissingObjectError(error: unknown) {
   return error.name === 'NoSuchKey' || error.name === 'NotFound';
 }
 
+function encodeRfc3986(value: string) {
+  return encodeURIComponent(value).replace(/[!'()*]/g, (char) => `%${char.charCodeAt(0).toString(16).toUpperCase()}`);
+}
+
+function encodeObjectKey(key: string) {
+  return key
+    .split('/')
+    .map((part) => encodeRfc3986(part))
+    .join('/');
+}
+
+function hmac(key: Buffer | string, value: string) {
+  return createHmac('sha256', key).update(value, 'utf8').digest();
+}
+
+function getSigningKey(secretAccessKey: string, dateStamp: string) {
+  const dateKey = hmac(`AWS4${secretAccessKey}`, dateStamp);
+  const regionKey = hmac(dateKey, 'auto');
+  const serviceKey = hmac(regionKey, 's3');
+  return hmac(serviceKey, 'aws4_request');
+}
+
 export async function getR2ObjectText(key: string) {
   const env = getBlogEditorEnv();
   const r2 = getR2Client();
@@ -109,6 +132,48 @@ export async function putR2Object(
       CacheControl: cacheControl,
     }),
   );
+}
+
+export function createR2PutSignedUrl(key: string, expiresIn = 900) {
+  assertBlogEditorWriteConfigured();
+  const env = getBlogEditorEnv();
+  const endpoint = new URL(env.r2Endpoint.replace(/\/$/, ''));
+  const now = new Date();
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, '');
+  const dateStamp = amzDate.slice(0, 8);
+  const credentialScope = `${dateStamp}/auto/s3/aws4_request`;
+  const canonicalUri = `/${encodeRfc3986(env.r2Bucket)}/${encodeObjectKey(key)}`;
+  const query = new URLSearchParams({
+    'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
+    'X-Amz-Credential': `${env.r2AccessKeyId}/${credentialScope}`,
+    'X-Amz-Date': amzDate,
+    'X-Amz-Expires': String(expiresIn),
+    'X-Amz-SignedHeaders': 'host',
+  });
+  const canonicalQueryString = Array.from(query.entries())
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([name, value]) => `${encodeRfc3986(name)}=${encodeRfc3986(value)}`)
+    .join('&');
+  const canonicalHeaders = `host:${endpoint.host}\n`;
+  const canonicalRequest = [
+    'PUT',
+    canonicalUri,
+    canonicalQueryString,
+    canonicalHeaders,
+    'host',
+    'UNSIGNED-PAYLOAD',
+  ].join('\n');
+  const stringToSign = [
+    'AWS4-HMAC-SHA256',
+    amzDate,
+    credentialScope,
+    createHash('sha256').update(canonicalRequest, 'utf8').digest('hex'),
+  ].join('\n');
+  const signature = createHmac('sha256', getSigningKey(env.r2SecretAccessKey, dateStamp))
+    .update(stringToSign, 'utf8')
+    .digest('hex');
+
+  return `${endpoint.origin}${canonicalUri}?${canonicalQueryString}&X-Amz-Signature=${signature}`;
 }
 
 export async function putR2Json(key: string, value: unknown) {
