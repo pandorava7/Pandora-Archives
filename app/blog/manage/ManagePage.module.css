@@ -678,7 +678,7 @@ select.textInput {
 
 .previewMarkdown pre code {
   background: transparent;
-  color: inherit;
+  color: white;
   padding: 0;
   border-radius: 0;
 }
