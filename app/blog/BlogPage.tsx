@@ -26,6 +26,7 @@ import waveStyles from '@/assets/css/Waves.module.css'
 import { playClick } from '@/utils/sfx';
 
 const BLOG_ENTER_EVENT = 'pandora:blog-enter';
+const BLOG_ENTERED_SESSION_KEY = 'pandora:blog-entered';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
     '游戏人生': <Folder size={16} />,
@@ -58,8 +59,20 @@ const BlogPage: React.FC = () => {
     } = useBlogData();
 
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [hasEntered, setHasEntered] = useState(false);
+    const [hasEntered, setHasEntered] = useState(true);
+    const [overlayReady, setOverlayReady] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        try {
+            const entered = sessionStorage.getItem(BLOG_ENTERED_SESSION_KEY) === '1';
+            setHasEntered(entered);
+        } catch {
+            setHasEntered(false);
+        } finally {
+            setOverlayReady(true);
+        }
+    }, []);
 
     // 点击外部关闭下拉
     useEffect(() => {
@@ -73,7 +86,7 @@ const BlogPage: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (hasEntered) return;
+        if (!overlayReady || hasEntered) return;
 
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
@@ -81,10 +94,15 @@ const BlogPage: React.FC = () => {
         return () => {
             document.body.style.overflow = previousOverflow;
         };
-    }, [hasEntered]);
+    }, [hasEntered, overlayReady]);
 
     const enterBlog = () => {
         playClick();
+        try {
+            sessionStorage.setItem(BLOG_ENTERED_SESSION_KEY, '1');
+        } catch {
+            // Ignore storage failures and continue with in-memory state.
+        }
         window.dispatchEvent(new Event(BLOG_ENTER_EVENT));
         setHasEntered(true);
     };
@@ -122,7 +140,7 @@ const BlogPage: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            {!hasEntered && (
+            {overlayReady && !hasEntered && (
                 <div className={styles.enterOverlay}>
                     <video
                         className={styles.enterVideo}
