@@ -306,6 +306,31 @@
   padding-left: 2em;
 }
 
+.markdownContent ul {
+  list-style-type: disc;
+}
+
+.markdownContent ol {
+  list-style-type: decimal;
+}
+
+.markdownContent ul ul {
+  list-style-type: circle;
+}
+
+.markdownContent ul ul ul {
+  list-style-type: square;
+}
+
+.markdownContent ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdownContent li::marker {
+  color: #4a90e2;
+  font-weight: 700;
+}
+
 .markdownContent li {
   margin-bottom: 0.5em;
   color: #4a5568;
@@ -323,6 +348,10 @@
   margin-right: 0.55em;
   accent-color: #4a90e2;
   vertical-align: -0.12em;
+}
+
+.markdownContent li:has(> input[type='checkbox']) {
+  list-style: none;
 }
 
 .markdownContent table {

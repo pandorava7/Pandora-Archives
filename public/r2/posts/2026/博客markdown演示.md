@@ -31,7 +31,7 @@ summary: "演示这个网站支持的博客markdown功能..."
 你可以使用 **加粗**，*斜体*，或者是 ~~删除线~~。此外，还可以点击这个[返回首页](/)的内部链接。
 
 ### 图片
-![描述文本](/src/assets/images/blog_header.png)
+![描述文本](media/blog_header.png)
 
 ---
 

@@ -1,0 +1,5 @@
+[    5482ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/114fb_next_dist_a7bfadff._.js:2297
+[    5611ms] [LOG] %c%s%c slug: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   %E5%8D%9A%E5%AE%A2markdown%E6%BC%94%E7%A4%BA @ http://localhost:3001/_next/static/chunks/114fb_next_dist_a7bfadff._.js:2297
+[    5656ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/114fb_next_dist_a7bfadff._.js:2297
+[    5706ms] [INFO] 🌐 i18next is made possible by our own product, Locize — consider powering your project with managed localization (AI, CDN, integrations): https://locize.com 💙 @ http://localhost:3001/_next/static/chunks/114fb_next_dist_a7bfadff._.js:2297
+[    6047ms] [ERROR] 找不到对应文章: 博客markdown演示 @ http://localhost:3001/_next/static/chunks/114fb_next_dist_a7bfadff._.js:3127

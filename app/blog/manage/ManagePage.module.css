@@ -608,6 +608,31 @@ select.textInput {
   padding-left: 1.7em;
 }
 
+.previewMarkdown ul {
+  list-style-type: disc;
+}
+
+.previewMarkdown ol {
+  list-style-type: decimal;
+}
+
+.previewMarkdown ul ul {
+  list-style-type: circle;
+}
+
+.previewMarkdown ul ul ul {
+  list-style-type: square;
+}
+
+.previewMarkdown ol ol {
+  list-style-type: lower-alpha;
+}
+
+.previewMarkdown li::marker {
+  color: #5f92eb;
+  font-weight: 700;
+}
+
 .previewMarkdown li {
   margin-bottom: 0.45em;
 }
@@ -624,6 +649,10 @@ select.textInput {
   margin-right: 0.5em;
   accent-color: #5f92eb;
   vertical-align: -0.12em;
+}
+
+.previewMarkdown li:has(> input[type='checkbox']) {
+  list-style: none;
 }
 
 .previewMarkdown blockquote {
